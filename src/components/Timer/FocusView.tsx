@@ -22,7 +22,7 @@ import {
 import { triggerSideConfetti } from '../../utils/confetti';
 
 const FocusView: React.FC = () => {
-  const { activeTask, setViewMode, incrementPomodoro, settings } = useApp();
+  const { activeTask, setViewMode, incrementPomodoro, settings, setShowTomatoThrow } = useApp();
   const { timerState, startTimer, pauseTimer, resumeTimer, stopTimer, formatTime, incrementCycle } = useTimer({
     onComplete: handleTimerComplete,
   });
@@ -55,6 +55,10 @@ const FocusView: React.FC = () => {
   }, [activeTask]);
 
   const handleCancel = () => {
+    // Start tomato throwing animation
+    setShowTomatoThrow(true);
+    
+    // Immediately stop timer and return to task list
     stopTimer();
     setViewMode('taskList');
   };

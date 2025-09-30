@@ -6,12 +6,23 @@ import Header from './components/Header/Header';
 import TaskList from './components/TaskList/TaskList';
 import FocusView from './components/Timer/FocusView';
 import BreakView from './components/Timer/BreakView';
+import TomatoThrow from './components/Animation/TomatoThrow';
+import { triggerTomatoSplatter } from './utils/confetti';
 
 const AppContent: React.FC = () => {
-  const { viewMode } = useApp();
+  const { viewMode, showTomatoThrow, setShowTomatoThrow } = useApp();
+
+  const handleTomatoAnimationComplete = () => {
+    setShowTomatoThrow(false);
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
+      <TomatoThrow 
+        isVisible={showTomatoThrow} 
+        onAnimationComplete={handleTomatoAnimationComplete}
+        onSplatter={() => triggerTomatoSplatter()}
+      />
       <Header />
       {viewMode === 'taskList' && <TaskList />}
       {viewMode === 'focus' && <FocusView />}
