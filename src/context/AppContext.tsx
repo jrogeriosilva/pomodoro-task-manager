@@ -12,6 +12,10 @@ interface AppContextType {
   activeTask: Task | null;
   setActiveTask: (task: Task | null) => void;
 
+  // Tomato animation state
+  showTomatoThrow: boolean;
+  setShowTomatoThrow: (show: boolean) => void;
+
   // Tasks management
   tasks: Task[];
   addTask: (text: string, totalPomodoros: number) => Task;
@@ -32,6 +36,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('taskList');
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [showTomatoThrow, setShowTomatoThrow] = useState(false);
 
   const {
     tasks,
@@ -50,6 +55,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setViewMode,
     activeTask,
     setActiveTask,
+    showTomatoThrow,
+    setShowTomatoThrow,
     tasks,
     addTask,
     updateTask,

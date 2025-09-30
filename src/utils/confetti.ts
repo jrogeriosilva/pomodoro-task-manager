@@ -87,3 +87,64 @@ export const triggerSimpleConfetti = () => {
     zIndex: 9999,
   });
 };
+
+// Trigger tomato splatter effect with red particles
+export const triggerTomatoSplatter = () => {
+  const tomatoColors = ['#ff4444', '#cc0000', '#ff6666', '#990000', '#ff2222'];
+
+  // Central explosion
+  confetti({
+    particleCount: 100,
+    spread: 360,
+    origin: { x: 0.6, y: 0.5 },
+    colors: tomatoColors,
+    gravity: 1,
+    drift: 0,
+    ticks: 200,
+    scalar: 0.8,
+    zIndex: 9998,
+  });
+
+  // Juice spray effect
+  confetti({
+    particleCount: 50,
+    angle: 45,
+    spread: 45,
+    origin: { x: 0.6, y: 0.5 },
+    colors: tomatoColors,
+    gravity: 0.8,
+    drift: -0.2,
+    ticks: 150,
+    scalar: 0.6,
+    zIndex: 9998,
+  });
+
+  confetti({
+    particleCount: 50,
+    angle: 135,
+    spread: 45,
+    origin: { x: 0.6, y: 0.5 },
+    colors: tomatoColors,
+    gravity: 0.8,
+    drift: 0.2,
+    ticks: 150,
+    scalar: 0.6,
+    zIndex: 9998,
+  });
+
+  // Dripping effect
+  setTimeout(() => {
+    confetti({
+      particleCount: 30,
+      angle: 90,
+      spread: 30,
+      origin: { x: 0.6, y: 0.5 },
+      colors: tomatoColors,
+      gravity: 2,
+      drift: 0,
+      ticks: 300,
+      scalar: 0.4,
+      zIndex: 9998,
+    });
+  }, 200);
+};

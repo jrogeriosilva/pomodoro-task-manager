@@ -26,7 +26,7 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
-  const { updateTask, deleteTask, toggleTaskComplete, setActiveTask, setViewMode } = useApp();
+  const { updateTask, deleteTask, toggleTaskComplete, setActiveTask, setViewMode, setShowTomatoThrow } = useApp();
   const [editOpen, setEditOpen] = useState(false);
   const [editText, setEditText] = useState(task.text);
   const [editPomodoros, setEditPomodoros] = useState(task.totalPomodoros);
@@ -34,6 +34,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   const progress = (task.pomodorosCompleted / task.totalPomodoros) * 100;
 
   const handlePlay = () => {
+    setShowTomatoThrow(false); // Reset tomato animation state
     setActiveTask(task);
     setViewMode('focus');
   };
