@@ -59,7 +59,7 @@ export const taskTemplates: TaskTemplate[] = [
       "Review chapter notes",
       "Practice problems",
       "Create summary",
-      "Self-quiz"
+      "Self-quiz",
     ],
     totalPomodoros: 4,
   },
@@ -70,7 +70,7 @@ export const taskTemplates: TaskTemplate[] = [
       "Plan feature architecture",
       "Implement core functionality",
       "Write tests",
-      "Code review and refactor"
+      "Code review and refactor",
     ],
     totalPomodoros: 6,
   },
@@ -81,7 +81,7 @@ export const taskTemplates: TaskTemplate[] = [
       "Research and outline",
       "Write first draft",
       "Edit and revise",
-      "Final proofread"
+      "Final proofread",
     ],
     totalPomodoros: 5,
   },
@@ -92,7 +92,7 @@ export const taskTemplates: TaskTemplate[] = [
       "Watch tutorial/read documentation",
       "Hands-on practice",
       "Build small project",
-      "Review and reinforce"
+      "Review and reinforce",
     ],
     totalPomodoros: 4,
   },
@@ -104,8 +104,11 @@ export function useStore() {
     defaultInventory
   );
 
-  const purchaseItem = (itemId: string, spendPoints: (points: number) => boolean): boolean => {
-    const item = storeItems.find(i => i.id === itemId);
+  const purchaseItem = (
+    itemId: string,
+    spendPoints: (points: number) => boolean
+  ): boolean => {
+    const item = storeItems.find((i) => i.id === itemId);
     if (!item) return false;
 
     // Check if user already owns non-consumable items
@@ -118,7 +121,7 @@ export function useStore() {
       return false;
     }
 
-    setInventory(prev => {
+    setInventory((prev) => {
       if (item.isConsumable) {
         // Add to consumable items
         return {
@@ -141,22 +144,22 @@ export function useStore() {
   };
 
   const useConsumableItem = (itemId: string): boolean => {
-    const item = storeItems.find(i => i.id === itemId);
+    const item = storeItems.find((i) => i.id === itemId);
     if (!item || !item.isConsumable || !inventory.consumableItems[itemId]) {
       return false;
     }
 
-    setInventory(prev => {
+    setInventory((prev) => {
       const newConsumableItems = { ...prev.consumableItems };
       newConsumableItems[itemId] = newConsumableItems[itemId] - 1;
-      
+
       if (newConsumableItems[itemId] <= 0) {
         delete newConsumableItems[itemId];
       }
 
       // Add active effect
       const newActiveEffects = [...prev.activeEffects];
-      
+
       if (item.effect === "extendBreak") {
         newActiveEffects.push({
           itemId,
@@ -184,7 +187,7 @@ export function useStore() {
   };
 
   const addToTimeBank = (minutes: number) => {
-    setInventory(prev => ({
+    setInventory((prev) => ({
       ...prev,
       timeBank: prev.timeBank + minutes,
     }));
@@ -195,7 +198,7 @@ export function useStore() {
       return false;
     }
 
-    setInventory(prev => ({
+    setInventory((prev) => ({
       ...prev,
       timeBank: prev.timeBank - minutes,
     }));
@@ -204,16 +207,18 @@ export function useStore() {
   };
 
   const consumeActiveEffect = (effectId: string) => {
-    setInventory(prev => {
-      const newActiveEffects = prev.activeEffects.map(effect => {
-        if (effect.itemId === effectId) {
-          return {
-            ...effect,
-            remainingUses: effect.remainingUses - 1,
-          };
-        }
-        return effect;
-      }).filter(effect => effect.remainingUses > 0);
+    setInventory((prev) => {
+      const newActiveEffects = prev.activeEffects
+        .map((effect) => {
+          if (effect.itemId === effectId) {
+            return {
+              ...effect,
+              remainingUses: effect.remainingUses - 1,
+            };
+          }
+          return effect;
+        })
+        .filter((effect) => effect.remainingUses > 0);
 
       return {
         ...prev,
@@ -223,11 +228,14 @@ export function useStore() {
   };
 
   const getActiveEffect = (effectType: string): ActiveEffect | null => {
-    return inventory.activeEffects.find(effect => effect.effect === effectType) || null;
+    return (
+      inventory.activeEffects.find((effect) => effect.effect === effectType) ||
+      null
+    );
   };
 
   const hasItem = (itemId: string): boolean => {
-    const item = storeItems.find(i => i.id === itemId);
+    const item = storeItems.find((i) => i.id === itemId);
     if (!item) return false;
 
     if (item.isConsumable) {

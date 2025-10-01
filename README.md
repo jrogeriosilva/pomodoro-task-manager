@@ -23,11 +23,11 @@ A modern, feature-rich Pomodoro timer application built with React, TypeScript, 
 
 #### 2. � Tomato Store (Productivity Store)
 
-- **Enable/Disable**: Toggle Tomato Store mode in settings  
+- **Enable/Disable**: Toggle Tomato Store mode in settings
 - **Power-up Shopping**: Purchase productivity-enhancing items with tomato points
 - **Available Items**:
   - **Break Extender** (25 points): Adds +2 minutes to next 5 breaks
-  - **Double Points** (50 points): Earn 2x points for next 10 Pomodoros  
+  - **Double Points** (50 points): Earn 2x points for next 10 Pomodoros
   - **Time Bank** (120 points): Store unused break time for later use
   - **Task Templates** (50 points): Pre-made task sets for common workflows
 - **Inventory Management**: Track owned items and active effects
@@ -96,7 +96,7 @@ npm run build
 
 ### Fortune Tiger Mode
 
-1. **Enable Mode**: Go to Settings and toggle "Fortune Tiger Mode"  
+1. **Enable Mode**: Go to Settings and toggle "Fortune Tiger Mode"
 2. **Access Slot Machine**: Click "Casino" button in header
 3. **Place Bets**: Choose how many tomato points to wager (minimum 1 point)
 4. **Spin to Win**: Hit the spin button and watch the reels

@@ -57,7 +57,7 @@ export interface ActiveEffect {
   value: number; // effect strength
 }
 
-export type StoreCategory = 'powerups' | 'utility';
+export type StoreCategory = "powerups" | "utility";
 
 export interface TaskTemplate {
   id: string;
