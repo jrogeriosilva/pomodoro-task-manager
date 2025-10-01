@@ -1,5 +1,5 @@
-import { useLocalStorage } from './useLocalStorage';
-import { Settings } from '../types';
+import { useLocalStorage } from "./useLocalStorage";
+import { Settings } from "../types";
 
 const defaultSettings: Settings = {
   focusDuration: 25,
@@ -8,11 +8,12 @@ const defaultSettings: Settings = {
   cyclesForLongBreak: 4,
   soundEnabled: true,
   notificationsEnabled: true,
+  fortuneTigerMode: false,
 };
 
 export function useSettings() {
   const [settings, setSettings] = useLocalStorage<Settings>(
-    'pomodoro-settings',
+    "pomodoro-settings",
     defaultSettings
   );
 

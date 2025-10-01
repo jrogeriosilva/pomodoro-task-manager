@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ViewMode, Task } from '../types';
+import { ViewMode, Task, TomatoPoints } from '../types';
 import { useTasks } from '../hooks/useTasks';
 import { useSettings } from '../hooks/useSettings';
+import { useTomatoPoints } from '../hooks/useTomatoPoints';
 
 interface AppContextType {
   // View state
@@ -16,6 +17,11 @@ interface AppContextType {
   showTomatoThrow: boolean;
   setShowTomatoThrow: (show: boolean) => void;
 
+  // Cycle tracking
+  cyclesCompleted: number;
+  incrementCycle: () => void;
+  resetCycles: () => void;
+
   // Tasks management
   tasks: Task[];
   addTask: (text: string, totalPomodoros: number) => Task;
@@ -29,6 +35,12 @@ interface AppContextType {
   settings: any;
   updateSettings: (newSettings: any) => void;
   resetSettings: () => void;
+
+  // Tomato Points
+  tomatoPoints: TomatoPoints;
+  addTomatoPoints: (points: number) => void;
+  spendTomatoPoints: (points: number) => boolean;
+  checkAndResetDaily: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -37,6 +49,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [viewMode, setViewMode] = useState<ViewMode>('taskList');
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [showTomatoThrow, setShowTomatoThrow] = useState(false);
+  const [cyclesCompleted, setCyclesCompleted] = useState(0);
+
+  const incrementCycle = () => {
+    setCyclesCompleted(prev => prev + 1);
+  };
+
+  const resetCycles = () => {
+    setCyclesCompleted(0);
+  };
 
   const {
     tasks,
@@ -50,6 +71,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const { settings, updateSettings, resetSettings } = useSettings();
 
+  const {
+    tomatoPoints,
+    addTomatoPoints,
+    spendTomatoPoints,
+    checkAndResetDaily,
+  } = useTomatoPoints();
+
   const value: AppContextType = {
     viewMode,
     setViewMode,
@@ -57,6 +85,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setActiveTask,
     showTomatoThrow,
     setShowTomatoThrow,
+    cyclesCompleted,
+    incrementCycle,
+    resetCycles,
     tasks,
     addTask,
     updateTask,
@@ -67,6 +98,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     settings,
     updateSettings,
     resetSettings,
+    tomatoPoints,
+    addTomatoPoints,
+    spendTomatoPoints,
+    checkAndResetDaily,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

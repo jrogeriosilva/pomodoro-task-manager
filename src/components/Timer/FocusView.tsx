@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Box,
   Container,
@@ -22,30 +22,58 @@ import {
 import { triggerSideConfetti } from '../../utils/confetti';
 
 const FocusView: React.FC = () => {
-  const { activeTask, setViewMode, incrementPomodoro, settings, setShowTomatoThrow } = useApp();
-  const { timerState, startTimer, pauseTimer, resumeTimer, stopTimer, formatTime, incrementCycle } = useTimer({
+  const { 
+    activeTask, 
+    setViewMode, 
+    incrementPomodoro, 
+    settings, 
+    setShowTomatoThrow, 
+    addTomatoPoints, 
+    cyclesCompleted,
+    incrementCycle 
+  } = useApp();
+  
+  const completionHandled = useRef(false);
+  
+  const focusTimer = useTimer({
     onComplete: handleTimerComplete,
   });
+  const { timerState, startTimer, pauseTimer, resumeTimer, stopTimer, formatTime } = focusTimer;
 
   function handleTimerComplete() {
-    if (timerState.mode === 'focus' && activeTask) {
-      // Increment pomodoro count for the task
-      incrementPomodoro(activeTask.id);
-      incrementCycle();
-
-      // Trigger confetti celebration
-      triggerSideConfetti();
-
-      // Show notifications
-      if (settings.notificationsEnabled) {
-        showNotification('Focus Session Complete!', `Great job! Time for a break.`);
-      }
-      if (settings.soundEnabled) {
-        playNotificationSound();
-      }
-      flashPageTitle('🎉 Break Time!');
-    }
+    // Set a flag to handle completion in useEffect
+    completionHandled.current = true;
   }
+
+  // Handle timer completion in useEffect to avoid state update during render
+  useEffect(() => {
+    if (completionHandled.current && timerState.mode === 'focus' && activeTask && !timerState.isActive && timerState.timeRemaining === 0) {
+      completionHandled.current = false;
+
+      // Defer state updates to next tick
+      setTimeout(() => {
+        // Increment pomodoro count for the task
+        incrementPomodoro(activeTask.id);
+        incrementCycle();
+
+        // Award tomato points based on focus duration (1 point per minute)
+        const pointsEarned = settings.focusDuration;
+        addTomatoPoints(pointsEarned);
+
+        // Trigger confetti celebration
+        triggerSideConfetti();
+
+        // Show notifications
+        if (settings.notificationsEnabled) {
+          showNotification('Focus Session Complete!', `Great job! Time for a break. You earned ${pointsEarned} 🍅 points!`);
+        }
+        if (settings.soundEnabled) {
+          playNotificationSound();
+        }
+        flashPageTitle(`🎉 Break Time! +${pointsEarned}🍅`);
+      }, 0);
+    }
+  }, [timerState.isActive, timerState.timeRemaining, timerState.mode, activeTask, incrementPomodoro, incrementCycle, addTomatoPoints, settings]);
 
   useEffect(() => {
     if (activeTask && !timerState.isActive && timerState.mode === 'idle') {
@@ -64,15 +92,10 @@ const FocusView: React.FC = () => {
   };
 
   const handleStartBreak = () => {
-    const isLongBreak =
-      (timerState.cyclesCompleted % settings.cyclesForLongBreak) === 0 &&
-      timerState.cyclesCompleted > 0;
-
-    const breakDuration = isLongBreak
-      ? settings.longBreakDuration
-      : settings.shortBreakDuration;
-
-    startTimer(breakDuration, isLongBreak ? 'longBreak' : 'shortBreak');
+    // Stop the current focus timer
+    stopTimer();
+    
+    // Switch to break view - the break view will start its own timer
     setViewMode('break');
   };
 
@@ -115,7 +138,7 @@ const FocusView: React.FC = () => {
           }}
         >
           <Chip
-            label={`Cycle ${timerState.cyclesCompleted + 1}`}
+            label={`Cycle ${cyclesCompleted + 1}`}
             color="primary"
             sx={{ mb: 2 }}
           />
