@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box, Chip } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Box, Chip, Button } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
+import CasinoIcon from '@mui/icons-material/Casino';
 import SettingsDialog from '../Settings/SettingsDialog';
 import { useApp } from '../../context/AppContext';
 
 const Header: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const { tomatoPoints, checkAndResetDaily } = useApp();
+  const { tomatoPoints, checkAndResetDaily, settings, setViewMode } = useApp();
+
+  const handleGoToSlotMachine = () => {
+    setViewMode('slotMachine');
+  };
 
   // Check for daily reset on component mount
   useEffect(() => {
@@ -41,6 +46,30 @@ const Header: React.FC = () => {
               Today: +{tomatoPoints.earnedToday}
             </Typography>
           </Box>
+
+          {/* Fortune Tiger Casino Button */}
+          {settings.fortuneTigerMode && (
+            <Button
+              startIcon={<CasinoIcon />}
+              onClick={handleGoToSlotMachine}
+              disabled={tomatoPoints.total === 0}
+              color="inherit"
+              sx={{
+                mr: 1,
+                fontWeight: 600,
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                },
+                '&:disabled': {
+                  opacity: 0.5,
+                },
+              }}
+            >
+              Casino
+            </Button>
+          )}
 
           <IconButton
             color="inherit"

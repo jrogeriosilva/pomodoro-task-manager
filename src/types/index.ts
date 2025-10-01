@@ -29,4 +29,4 @@ export interface TimerState {
   cyclesCompleted: number;
 }
 
-export type ViewMode = "taskList" | "focus" | "break";
+export type ViewMode = "taskList" | "focus" | "break" | "slotMachine";

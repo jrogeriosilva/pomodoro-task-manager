@@ -2,11 +2,10 @@ import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import TaskForm from '../TaskForm/TaskForm';
 import TaskItem from '../TaskItem/TaskItem';
-import SlotMachine from '../SlotMachine/SlotMachine';
 import { useApp } from '../../context/AppContext';
 
 const TaskList: React.FC = () => {
-  const { tasks, settings } = useApp();
+  const { tasks } = useApp();
 
   return (
     <Container
@@ -27,9 +26,6 @@ const TaskList: React.FC = () => {
       }}
     >
       <TaskForm />
-
-      {/* Show Slot Machine if Fortune Tiger Mode is enabled */}
-      {settings.fortuneTigerMode && <SlotMachine />}
 
       {tasks.length === 0 ? (
         <Box

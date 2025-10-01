@@ -6,6 +6,7 @@ import Header from './components/Header/Header';
 import TaskList from './components/TaskList/TaskList';
 import FocusView from './components/Timer/FocusView';
 import BreakView from './components/Timer/BreakView';
+import SlotMachineScreen from './components/SlotMachineScreen/SlotMachineScreen';
 import TomatoThrow from './components/Animation/TomatoThrow';
 import { triggerTomatoSplatter } from './utils/confetti';
 
@@ -27,6 +28,7 @@ const AppContent: React.FC = () => {
       {viewMode === 'taskList' && <TaskList />}
       {viewMode === 'focus' && <FocusView />}
       {viewMode === 'break' && <BreakView />}
+      {viewMode === 'slotMachine' && <SlotMachineScreen />}
     </Box>
   );
 };
