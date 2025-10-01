@@ -20,10 +20,11 @@ import {
 } from '../../utils/notifications';
 
 const BreakView: React.FC = () => {
-  const { setViewMode, settings } = useApp();
-  const { timerState, pauseTimer, resumeTimer, stopTimer, formatTime } = useTimer({
+  const { setViewMode, settings, cyclesCompleted } = useApp();
+  const breakTimer = useTimer({
     onComplete: handleTimerComplete,
   });
+  const { timerState, startTimer, pauseTimer, resumeTimer, stopTimer, formatTime } = breakTimer;
 
   function handleTimerComplete() {
     // Show notifications when break ends
@@ -35,6 +36,13 @@ const BreakView: React.FC = () => {
     }
     flashPageTitle('✨ Back to Work!');
   }
+
+  // Start break timer when component mounts
+  useEffect(() => {
+    const isLongBreak = (cyclesCompleted % settings.cyclesForLongBreak) === 0 && cyclesCompleted > 0;
+    const breakDuration = isLongBreak ? settings.longBreakDuration : settings.shortBreakDuration;
+    startTimer(breakDuration, isLongBreak ? 'longBreak' : 'shortBreak');
+  }, []);
 
   const handleFinish = () => {
     stopTimer();
