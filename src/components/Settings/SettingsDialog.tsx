@@ -33,7 +33,7 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ open, onClose }) => {
     if (localSettings.notificationsEnabled && !settings.notificationsEnabled) {
       const granted = await requestNotificationPermission();
       if (!granted) {
-        setLocalSettings((prev) => ({ ...prev, notificationsEnabled: false }));
+        setLocalSettings((prev: any) => ({ ...prev, notificationsEnabled: false }));
         alert('Notification permission denied. Please enable in browser settings.');
         return;
       }
@@ -44,7 +44,7 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ open, onClose }) => {
   };
 
   const handleChange = (field: string, value: any) => {
-    setLocalSettings((prev) => ({ ...prev, [field]: value }));
+    setLocalSettings((prev: any) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -126,6 +126,27 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ open, onClose }) => {
             }
             label="Browser Notifications"
           />
+
+          <Divider />
+
+          <Typography variant="h6" color="primary">
+            🎰 Fortune Tiger Mode
+          </Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={localSettings.fortuneTigerMode}
+                onChange={(e) => handleChange('fortuneTigerMode', e.target.checked)}
+                color="warning"
+              />
+            }
+            label="Enable Fortune Tiger Mode (Casino Slot Machine)"
+          />
+
+          <Typography variant="caption" color="text.secondary" sx={{ mt: -1, mb: 1 }}>
+            Spend tomato points to try winning more points in a slot machine game!
+          </Typography>
         </Box>
       </DialogContent>
       <DialogActions>

@@ -22,7 +22,7 @@ import {
 import { triggerSideConfetti } from '../../utils/confetti';
 
 const FocusView: React.FC = () => {
-  const { activeTask, setViewMode, incrementPomodoro, settings, setShowTomatoThrow } = useApp();
+  const { activeTask, setViewMode, incrementPomodoro, settings, setShowTomatoThrow, addTomatoPoints } = useApp();
   const { timerState, startTimer, pauseTimer, resumeTimer, stopTimer, formatTime, incrementCycle } = useTimer({
     onComplete: handleTimerComplete,
   });
@@ -33,17 +33,20 @@ const FocusView: React.FC = () => {
       incrementPomodoro(activeTask.id);
       incrementCycle();
 
+      // Award tomato points for completing a pomodoro
+      addTomatoPoints(1);
+
       // Trigger confetti celebration
       triggerSideConfetti();
 
       // Show notifications
       if (settings.notificationsEnabled) {
-        showNotification('Focus Session Complete!', `Great job! Time for a break.`);
+        showNotification('Focus Session Complete!', `Great job! Time for a break. You earned 1 🍅 point!`);
       }
       if (settings.soundEnabled) {
         playNotificationSound();
       }
-      flashPageTitle('🎉 Break Time!');
+      flashPageTitle('🎉 Break Time! +1🍅');
     }
   }
 

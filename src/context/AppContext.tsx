@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ViewMode, Task } from '../types';
+import { ViewMode, Task, TomatoPoints } from '../types';
 import { useTasks } from '../hooks/useTasks';
 import { useSettings } from '../hooks/useSettings';
+import { useTomatoPoints } from '../hooks/useTomatoPoints';
 
 interface AppContextType {
   // View state
@@ -29,6 +30,12 @@ interface AppContextType {
   settings: any;
   updateSettings: (newSettings: any) => void;
   resetSettings: () => void;
+
+  // Tomato Points
+  tomatoPoints: TomatoPoints;
+  addTomatoPoints: (points: number) => void;
+  spendTomatoPoints: (points: number) => boolean;
+  checkAndResetDaily: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -50,6 +57,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const { settings, updateSettings, resetSettings } = useSettings();
 
+  const {
+    tomatoPoints,
+    addTomatoPoints,
+    spendTomatoPoints,
+    checkAndResetDaily,
+  } = useTomatoPoints();
+
   const value: AppContextType = {
     viewMode,
     setViewMode,
@@ -67,6 +81,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     settings,
     updateSettings,
     resetSettings,
+    tomatoPoints,
+    addTomatoPoints,
+    spendTomatoPoints,
+    checkAndResetDaily,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
