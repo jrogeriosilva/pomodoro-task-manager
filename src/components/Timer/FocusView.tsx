@@ -30,7 +30,9 @@ const FocusView: React.FC = () => {
     setShowTomatoThrow, 
     addTomatoPoints, 
     cyclesCompleted,
-    incrementCycle 
+    incrementCycle,
+    getActiveEffect,
+    consumeActiveEffect 
   } = useApp();
   
   const completionHandled = useRef(false);
@@ -56,8 +58,14 @@ const FocusView: React.FC = () => {
         incrementPomodoro(activeTask.id);
         incrementCycle();
 
-        // Award tomato points based on focus duration (1 point per minute)
-        const pointsEarned = settings.focusDuration;
+        // Award tomato points - check for double points effect
+        let pointsEarned = 1; // Base point per completed Pomodoro
+        const doublePointsEffect = getActiveEffect("doublePoints");
+        if (doublePointsEffect) {
+          pointsEarned *= doublePointsEffect.value; // Apply multiplier
+          consumeActiveEffect("double-points");
+        }
+        
         addTomatoPoints(pointsEarned);
 
         // Trigger confetti celebration

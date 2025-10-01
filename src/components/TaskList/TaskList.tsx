@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import TaskForm from '../TaskForm/TaskForm';
 import TaskItem from '../TaskItem/TaskItem';
+import { ActiveEffectsDisplay } from '../ActiveEffects/ActiveEffectsDisplay';
 import { useApp } from '../../context/AppContext';
 
 const TaskList: React.FC = () => {
@@ -26,6 +27,7 @@ const TaskList: React.FC = () => {
       }}
     >
       <TaskForm />
+      <ActiveEffectsDisplay />
 
       {tasks.length === 0 ? (
         <Box

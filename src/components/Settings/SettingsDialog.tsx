@@ -147,6 +147,27 @@ const SettingsDialog: React.FC<SettingsDialogProps> = ({ open, onClose }) => {
           <Typography variant="caption" color="text.secondary" sx={{ mt: -1, mb: 1 }}>
             Spend tomato points to try winning more points in a slot machine game!
           </Typography>
+
+          <Divider />
+
+          <Typography variant="h6" color="primary">
+            🍅 Tomato Store
+          </Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={localSettings.storeMode}
+                onChange={(e) => handleChange('storeMode', e.target.checked)}
+                color="secondary"
+              />
+            }
+            label="Enable Tomato Store"
+          />
+
+          <Typography variant="caption" color="text.secondary" sx={{ mt: -1, mb: 1 }}>
+            Access the store to purchase productivity power-ups and useful items!
+          </Typography>
         </Box>
       </DialogContent>
       <DialogActions>

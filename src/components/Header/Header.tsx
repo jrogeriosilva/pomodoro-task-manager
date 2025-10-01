@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Box, Chip, Button } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CasinoIcon from '@mui/icons-material/Casino';
+import StoreIcon from '@mui/icons-material/Store';
 import SettingsDialog from '../Settings/SettingsDialog';
 import { useApp } from '../../context/AppContext';
 
@@ -11,6 +12,10 @@ const Header: React.FC = () => {
 
   const handleGoToSlotMachine = () => {
     setViewMode('slotMachine');
+  };
+
+  const handleGoToStore = () => {
+    setViewMode('store');
   };
 
   // Check for daily reset on component mount
@@ -46,6 +51,26 @@ const Header: React.FC = () => {
               Today: +{tomatoPoints.earnedToday}
             </Typography>
           </Box>
+
+          {/* Tomato Store Button */}
+          {settings.storeMode && (
+            <Button
+              startIcon={<StoreIcon />}
+              onClick={handleGoToStore}
+              color="inherit"
+              sx={{
+                mr: 1,
+                fontWeight: 600,
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                },
+              }}
+            >
+              Store
+            </Button>
+          )}
 
           {/* Fortune Tiger Casino Button */}
           {settings.fortuneTigerMode && (

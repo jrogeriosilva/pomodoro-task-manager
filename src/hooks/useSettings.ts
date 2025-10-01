@@ -9,6 +9,7 @@ const defaultSettings: Settings = {
   soundEnabled: true,
   notificationsEnabled: true,
   fortuneTigerMode: false,
+  storeMode: true,
 };
 
 export function useSettings() {

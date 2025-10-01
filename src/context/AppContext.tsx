@@ -3,6 +3,7 @@ import { ViewMode, Task, TomatoPoints } from '../types';
 import { useTasks } from '../hooks/useTasks';
 import { useSettings } from '../hooks/useSettings';
 import { useTomatoPoints } from '../hooks/useTomatoPoints';
+import { useStore } from '../hooks/useStore';
 
 interface AppContextType {
   // View state
@@ -41,6 +42,19 @@ interface AppContextType {
   addTomatoPoints: (points: number) => void;
   spendTomatoPoints: (points: number) => boolean;
   checkAndResetDaily: () => void;
+
+  // Store
+  inventory: any;
+  storeItems: any;
+  taskTemplates: any;
+  purchaseItem: (itemId: string, spendPoints: (points: number) => boolean) => boolean;
+  useConsumableItem: (itemId: string) => boolean;
+  addToTimeBank: (minutes: number) => void;
+  useTimeBank: (minutes: number) => boolean;
+  consumeActiveEffect: (effectId: string) => void;
+  getActiveEffect: (effectType: string) => any;
+  hasItem: (itemId: string) => boolean;
+  getItemQuantity: (itemId: string) => number;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -78,6 +92,20 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     checkAndResetDaily,
   } = useTomatoPoints();
 
+  const {
+    inventory,
+    storeItems,
+    taskTemplates,
+    purchaseItem,
+    useConsumableItem,
+    addToTimeBank,
+    useTimeBank,
+    consumeActiveEffect,
+    getActiveEffect,
+    hasItem,
+    getItemQuantity,
+  } = useStore();
+
   const value: AppContextType = {
     viewMode,
     setViewMode,
@@ -102,6 +130,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     addTomatoPoints,
     spendTomatoPoints,
     checkAndResetDaily,
+    inventory,
+    storeItems,
+    taskTemplates,
+    purchaseItem,
+    useConsumableItem,
+    addToTimeBank,
+    useTimeBank,
+    consumeActiveEffect,
+    getActiveEffect,
+    hasItem,
+    getItemQuantity,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

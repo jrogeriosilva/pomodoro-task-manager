@@ -20,7 +20,15 @@ import {
 } from '../../utils/notifications';
 
 const BreakView: React.FC = () => {
-  const { setViewMode, settings, cyclesCompleted } = useApp();
+  const { 
+    setViewMode, 
+    settings, 
+    cyclesCompleted,
+    getActiveEffect,
+    consumeActiveEffect,
+    useTimeBank,
+    inventory 
+  } = useApp();
   const breakTimer = useTimer({
     onComplete: handleTimerComplete,
   });
@@ -40,7 +48,15 @@ const BreakView: React.FC = () => {
   // Start break timer when component mounts
   useEffect(() => {
     const isLongBreak = (cyclesCompleted % settings.cyclesForLongBreak) === 0 && cyclesCompleted > 0;
-    const breakDuration = isLongBreak ? settings.longBreakDuration : settings.shortBreakDuration;
+    let breakDuration = isLongBreak ? settings.longBreakDuration : settings.shortBreakDuration;
+    
+    // Check for Break Extender effect
+    const breakExtenderEffect = getActiveEffect("extendBreak");
+    if (breakExtenderEffect) {
+      breakDuration += breakExtenderEffect.value;
+      consumeActiveEffect("break-extender");
+    }
+    
     startTimer(breakDuration, isLongBreak ? 'longBreak' : 'shortBreak');
   }, []);
 
@@ -118,6 +134,27 @@ const BreakView: React.FC = () => {
               </Button>
             )}
 
+            {inventory.timeBank > 0 && (
+              <Button
+                variant="outlined"
+                size="large"
+                onClick={() => {
+                  const minutesToAdd = Math.min(5, inventory.timeBank);
+                  if (useTimeBank(minutesToAdd)) {
+                    const newDuration = timerState.timeRemaining + (minutesToAdd * 60);
+                    // We need to update the timer state with the new duration
+                    if (timerState.mode !== 'idle') {
+                      startTimer(Math.ceil(newDuration / 60), timerState.mode);
+                    }
+                  }
+                }}
+                color="info"
+                sx={{ mr: 1 }}
+              >
+                🏦 Use Time Bank (+5 min)
+              </Button>
+            )}
+
             <Button
               variant="contained"
               size="large"
@@ -128,6 +165,12 @@ const BreakView: React.FC = () => {
               {isTimerComplete ? 'Back to Tasks' : 'Skip Break'}
             </Button>
           </Box>
+
+          {inventory.timeBank > 0 && (
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              🏦 Time Bank: {inventory.timeBank} minutes available
+            </Typography>
+          )}
 
           {isTimerComplete && (
             <Typography

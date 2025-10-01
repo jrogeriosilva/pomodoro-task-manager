@@ -14,6 +14,7 @@ export interface Settings {
   soundEnabled: boolean;
   notificationsEnabled: boolean;
   fortuneTigerMode: boolean; // New Fortune Tiger Mode setting
+  storeMode: boolean; // Enable/disable store feature
 }
 
 export interface TomatoPoints {
@@ -29,4 +30,38 @@ export interface TimerState {
   cyclesCompleted: number;
 }
 
-export type ViewMode = "taskList" | "focus" | "break" | "slotMachine";
+export type ViewMode = "taskList" | "focus" | "break" | "slotMachine" | "store";
+
+export interface StoreItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: StoreCategory;
+  icon: string; // emoji
+  isConsumable: boolean; // single use vs permanent
+  effect?: string; // effect type for power-ups
+}
+
+export interface UserInventory {
+  ownedItems: string[]; // item IDs for permanent items
+  consumableItems: { [itemId: string]: number }; // quantities for consumable items
+  activeEffects: ActiveEffect[];
+  timeBank: number; // stored break time in minutes
+}
+
+export interface ActiveEffect {
+  itemId: string;
+  effect: string;
+  remainingUses: number; // how many times left to use
+  value: number; // effect strength
+}
+
+export type StoreCategory = 'powerups' | 'utility';
+
+export interface TaskTemplate {
+  id: string;
+  name: string;
+  tasks: string[];
+  totalPomodoros: number;
+}
